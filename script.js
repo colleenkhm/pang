@@ -2,39 +2,48 @@ var score = 0;
 var aWidth;
 var aHeight;
 var timer;
-var iterations;
+// needs to be assigned an initial value
+var iterations = 0;
 
-window.addEventListener('load', setGameAreaBounds)
+window.addEventListener("load", setGameAreaBounds);
 
 function setGameAreaBounds() {
-    aWidth = innerWidth;
-    aHeight = innerHeight;
-    // subtracting widths and heights from score area/other items getting in the way
-    aWidth -= 22;
-    aHeight -= 97;
-    document.getElementById('gameArea').style.width = aWidth + 'px';
-    document.getElementById('gameArea').style.height = aHeight + 'px';
-    document.getElementById('dot').addEventListener('click', detectHit);
-    aWidth -= 74;
-    aHeight -= 74;
-    moveDot();
-
+  aWidth = innerWidth;
+  aHeight = innerHeight;
+  // subtracting widths and heights from score area/other items getting in the way
+  aWidth -= 22;
+  aHeight -= 97;
+  document.getElementById("gameArea").style.width = aWidth + "px";
+  document.getElementById("gameArea").style.height = aHeight + "px";
+  document.getElementById("dot").addEventListener("click", detectHit);
+  aWidth -= 74;
+  aHeight -= 74;
+  moveDot();
 }
 
 function detectHit() {
-    score += 1;
-    document.getElementById('scoreLabel').innerHTML = "Score: " + score;
+  score += 1;
+  document.getElementById("scoreLabel").innerHTML = "Score: " + score;
 }
 
 function moveDot() {
-    var x = Math.floor(Math.random()*aWidth);
-    var y = Math.floor(Math.random()*aHeight);
-    if(x<10)
-        x = 10;
-    if(y<10)
-        y=10;
-    document.getElementById('dot').style.left = x + 'px';
-    document.getElementById('dot').style.top = y + 'px';
-    
+  var x = Math.floor(Math.random() * aWidth);
+  var y = Math.floor(Math.random() * aHeight);
+  if (x < 10) {
+    x = 10;
+  }
+  if (y < 10) {
+    y = 10;
+  }
+  document.getElementById("dot").style.left = x + "px";
+  document.getElementById("dot").style.top = y + "px";
+  if (iterations < 30) {
+    // set timeout returns immediately and tells browser to wait/specify delay. not recursive
+    timer = setTimeout("moveDot()", 1000);
+  } else {
+    document.getElementById("scoreLabel").innerHTML += "     Game Over!";
+    document.getElementById("dot").removeEventListener("click", detectHit);
+    clearTimeout(timer);
+  }
+  iterations++;
 }
-
